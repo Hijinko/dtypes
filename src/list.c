@@ -118,7 +118,31 @@ int8_t list_delete(list * p_list, elem * p_elem)
     p_list->size--;
     return 0;
 }
-int8_t list_rm_next(list * p_list, elem * p_elem);
+
+/*
+ * @brief delete the element after the passed in element
+ * @param p_list the list to delete the element from
+ * @param p_elem the element before the element to delete 
+ * @return -1 on error else 0
+ */
+int8_t list_rm_next(list * p_list, elem * p_elem)
+{
+    // cant delete an element from a NULL or empty list
+    if ((NULL == p_list) || (0 == p_list->size)){
+        return -1;
+    }
+    elem * p_old_elem = NULL;
+    // if the element is NULL then the head is to be removed
+    if (NULL == p_elem){
+        p_old_elem = p_list->p_head;
+    }
+    else {
+        p_old_elem = p_elem->p_next;
+    }
+    // delete and remove the old element from the list
+    return list_delete(p_list, p_old_elem);
+}
+
 elem * list_remove(list * p_list, const void * p_data);
 // getters
 elem * list_head(list * p_list);
