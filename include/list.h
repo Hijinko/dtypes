@@ -5,7 +5,7 @@ typedef struct elem elem;
 typedef struct list list;
 // setup
 list * list_init(void (* p_destroy)(void * p_data), void (* p_compare)(const void * p_key1, const void * p_key2));
-int8_t list_destroy(list * p_list);
+void list_destroy(list * p_list);
 // adding data
 elem * list_append(list * p_list, const void * p_data);
 elem * list_prepend(list * p_list, const void * p_data);
