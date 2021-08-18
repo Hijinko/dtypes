@@ -182,6 +182,59 @@ int8_t list_rm_next(list * p_list, elem * p_elem)
 
 elem * list_remove(list * p_list, const void * p_data);
 // getters
-elem * list_head(list * p_list);
-elem * list_tail(list * p_list);
-int32_t list_size(list * p_list);
+
+/*
+ * @brief gets the head of a list
+ * @param p_list the list to get the head from
+ * @return pointer to the head of the list or NULL on error
+ */
+elem * list_head(list * p_list)
+{
+    // cant get the head of a NULL list
+    if (NULL == p_list){
+        return NULL;
+    }
+    return p_list->p_head;
+}
+
+/*
+ * @brief gets the tail of a list
+ * @param p_list the list to get the tail from
+ * @return pointer to the tail of the list or NULL on error
+ */
+elem * list_tail(list * p_list)
+{
+    // cant get the tail of a NULL list
+    if (NULL == p_list){
+        return NULL;
+    }
+    return p_list->p_tail;
+}
+
+/*
+ * @brief gets the size of a list
+ * @param p_list the list to get the size from
+ * @return size of the list or -1 on error
+ */
+int32_t list_size(list * p_list)
+{
+    // cant get the size of a NULL list
+    if (NULL == p_list){
+        return -1;
+    }
+    return p_list->size;
+}
+
+/*
+ * @breif gets the data in a list element
+ * @param p_elem the element to get the data from
+ * @return pointer to the data in the element or NULL on error
+ */
+const void * list_data(elem * p_elem)
+{
+    // cant get the data from a NULL element
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_data;
+}
