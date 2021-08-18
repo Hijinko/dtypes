@@ -9,7 +9,7 @@ TSTBIN = ./test/bin/
 TSTINC = ./test/include/
 LNK = -lcheck -lm -lpthread -lrt -lsubunit
 
-all: $(BIN)libdtype.a $(TSTBIN)testlibdtype.a
+all: $(BIN)libdtype.a
 
 ################
 # main targets #
@@ -41,7 +41,8 @@ debug: clean all
 profile: CMD += -pg
 profile: debug
 check: CMD += -I $(TSTINC)
-check: debug
 check: $(TST)check_check
-valgrind: check 
+valgrind: CMD += -g
+valgrind: clean check
+valgrind: 
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./test/check_check

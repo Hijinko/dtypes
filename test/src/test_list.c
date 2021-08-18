@@ -27,6 +27,11 @@ static void teardown_list(void)
     list_destroy(p_list);
 }
 
+START_TEST(test_list_append){
+    char * data = calloc(10, sizeof(data));
+    strcpy(data, "HELLO");
+    ck_assert(NULL != list_append(p_list, data));
+} END_TEST
 // create suite
 Suite * suite_list(void)
 {
@@ -34,6 +39,7 @@ Suite * suite_list(void)
     TCase * p_core = tcase_create("Core");
     // add test cases 
     tcase_add_checked_fixture(p_core, start_list, teardown_list);
+    tcase_add_test(p_core, test_list_append);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
