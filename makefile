@@ -6,10 +6,10 @@ CMD += -I $(INC)
 TST = ./test/
 TSTSRC = ./test/src/
 TSTBIN = ./test/bin/
-TSTINC = ./test/include
+TSTINC = ./test/include/
 LNK = -lcheck -lm -lpthread -lrt -lsubunit
 
-all: $(BIN)libdtype.a
+all: $(BIN)libdtype.a $(TSTBIN)testlibdtype.a
 
 ################
 # main targets #
@@ -20,16 +20,17 @@ $(BIN)list.o: $(SRC)list.c $(INC)list.h
 ################
 # test targets #
 ################
-$(TST)check_check: $(TSTBIN)check_check.o $(BIN)libdtype.a
+$(TST)check_check: $(TSTBIN)check_check.o $(TSTBIN)testlibdtype.a $(BIN)libdtype.a
 	$(CMD) $^ $(LNK) -o $@
 $(TSTBIN)check_check.o: $(TSTSRC)check_check.c
 	$(CMD) -c $^ -o $@
-$(TSTBIN)test_list.o: $(TSTSRC)test_list.c
-	$(CMD) -c $^ -o $@ 
+$(TSTBIN)test_list.o: $(TSTSRC)test_list.c $(TSTINC)test_list.h
+	$(CMD) -c $< -o $@ 
 
 ####################
 # libarary targets #
 ####################
+$(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o);
 $(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o);
 clean:
 	find . -type f -iname *.o -exec rm -rf {} \;

@@ -18,15 +18,15 @@ struct elem {
 /*
  * @brief list data type
  * @param size the number of elements in the list
- * @param p_destroy user defined function destroy the data in the list
  * @param p_compare user defined function to compare the data in the list
+ * @param p_destroy user defined function destroy the data in the list
  * @param p_head pointer to the first element in the list
  * @param p_tail pointer to the last element in the list
  */
 struct list {
     int32_t size;
+    int8_t (* p_compare)(const void * p_key1, const void * p_key2);
     void (* p_destroy)(void * p_data);
-    void (* p_compare)(const void * p_key1, const void * p_key2);
     elem * p_head;
     elem * p_tail;
 };
@@ -39,7 +39,7 @@ struct list {
  * @param p_compare user defined function to compare the data in the list
  * @return pointer to the new list or NULL on error
  */
-list * list_init(void (* p_destroy)(void * p_data), void (* p_compare)(const void * p_key1, const void * p_key2))
+list * list_init(void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
 {
     // create the list
     list * p_list = calloc(1, sizeof(*p_list));
@@ -50,8 +50,8 @@ list * list_init(void (* p_destroy)(void * p_data), void (* p_compare)(const voi
     }
     // set the initial values of the list
     p_list->size = 0;
-    p_list->p_destroy = p_destroy;
     p_list->p_compare = p_compare;
+    p_list->p_destroy = p_destroy;
     p_list->p_head = NULL;
     p_list->p_tail = NULL;
     return p_list;
