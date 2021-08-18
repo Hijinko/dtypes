@@ -67,6 +67,10 @@ void list_destroy(list * p_list)
     if (NULL == p_list){
         return;
     }
+    // iterate through the list and destroy all the elements
+    while (0 > p_list->size){
+        list_rm_next(p_list, NULL);
+    }
     // the memory for the list has to be freed
     free(p_list);
 }
