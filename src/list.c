@@ -9,7 +9,7 @@ struct node {
 struct list {
     int32_t size;
     void (* p_destroy)(void * p_data);
-    void (* p_compare)(const void * p_key2, const void * p_key2);
+    void (* p_compare)(const void * p_key1, const void * p_key2);
     node * p_head;
     node * p_tail;
 };
