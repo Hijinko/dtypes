@@ -1,8 +1,19 @@
-#ifndef _LIST_H
-#define _LIST_H
+#include <list.h>
 #include <stdint.h>
-typedef struct node node;
-typedef struct list list;
+struct node {
+    void * p_data;
+    struct node * p_prev;
+    struct node * p_next;
+};
+
+struct list {
+    int32_t size;
+    void (* p_destroy)(void * p_data);
+    void (* p_compare)(const void * p_key2, const void * p_key2);
+    node * p_head;
+    node * p_tail;
+};
+
 // setup
 list * list_init(void (* p_destroy)(void * p_data), void (* p_compare)(const void * p_key1, const void * p_key2));
 int8_t list_destroy(list * p_list);
@@ -18,4 +29,3 @@ node * list_remove(list * p_list, const void * p_data);
 node * list_head(list * p_list);
 node * list_tail(list * p_list);
 int32_t list_size(list * p_list);
-#endif
