@@ -1,5 +1,7 @@
 #include <list.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /*
  * @brief element in a list that holds the data
