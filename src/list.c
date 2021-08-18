@@ -224,3 +224,17 @@ int32_t list_size(list * p_list)
     }
     return p_list->size;
 }
+
+/*
+ * @breif gets the data in a list element
+ * @param p_elem the element to get the data from
+ * @return pointer to the data in the element or NULL on error
+ */
+const void * list_data(elem * p_elem)
+{
+    // cant get the data from a NULL element
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_data;
+}
