@@ -45,7 +45,7 @@ list * list_init(void (* p_destroy)(void * p_data), void (* p_compare)(const voi
     list * p_list = calloc(1, sizeof(*p_list));
     // if there was an error creating the list then return NULL
     if (NULL == p_list){
-        perror("List: ");
+        perror("list_init ");
         return NULL;
     }
     // set the initial values of the list
@@ -76,7 +76,40 @@ void list_destroy(list * p_list)
 }
 
 // adding data
-elem * list_append(list * p_list, const void * p_data);
+
+/*
+ * @brief adds data to the end of a list
+ * @param p_list the list to append to
+ * @param p_data the data to append to the list
+ * @return pointer to the new element in the list else NULL on error
+ */
+elem * list_append(list * p_list, const void * p_data)
+{
+    // cant append to A NULL list or from NULL data
+    if ((NULL == p_list) || (NULL == p_data)){
+        return NULL;
+    }
+    // an element needs to be created for the data
+    elem * p_elem = calloc(1, sizeof(*p_elem));
+    if (NULL == p_elem){
+        perror("list_append ");
+        return NULL;
+    }
+    // the values for the element need to be set
+    p_elem->p_data = p_data;
+    p_elem->p_prev = p_list->p_tail;
+    p_elem->p_next = NULL;
+    // appending new data will always update the list tail to the new element
+    p_list->p_tail = p_elem;
+    // if this is the first element in the list then it is also the head of the list
+    if (0 == p_list->size){
+        p_list->p_head = p_elem;
+    }
+    // adding a new element increases the size of the list
+    p_list->size++;
+    return p_elem;
+}
+
 elem * list_prepend(list * p_list, const void * p_data);
 elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data);
 // removing data
