@@ -47,6 +47,10 @@ START_TEST(test_list_head){
     ck_assert_str_eq("Yo", (char *)(list_data(list_head(p_list))));
 } END_TEST
 
+START_TEST(test_list_tail){ 
+    ck_assert_str_eq("They", (char *)(list_data(list_tail(p_list))));
+} END_TEST
+
 // create suite
 Suite * suite_list(void)
 {
@@ -59,6 +63,7 @@ Suite * suite_list(void)
     tcase_add_test(p_core, test_list_prepend);
     tcase_add_test(p_core, test_list_ins_next);
     tcase_add_test(p_core, test_list_head);
+    tcase_add_test(p_core, test_list_tail);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
