@@ -41,7 +41,7 @@ static elem * list_init_elem(const void * p_data)
     // an element needs to be created for the data
     elem * p_elem = calloc(1, sizeof(*p_elem));
     if (NULL == p_elem){
-        perror("list_append ");
+        perror("list_init ");
         return NULL;
     }
     // the values for the element need to be set
@@ -105,29 +105,9 @@ void list_destroy(list * p_list)
  */
 elem * list_append(list * p_list, const void * p_data)
 {
-    // cant append to A NULL list or from NULL data
-    if ((NULL == p_list) || (NULL == p_data)){
-        return NULL;
-    }
-    // an element needs to be created for the data
-    elem * p_elem = calloc(1, sizeof(*p_elem));
-    if (NULL == p_elem){
-        perror("list_append ");
-        return NULL;
-    }
-    // the values for the element need to be set
-    p_elem->p_data = p_data;
-    p_elem->p_prev = p_list->p_tail;
-    p_elem->p_next = NULL;
-    // appending new data will always update the list tail to the new element
-    p_list->p_tail = p_elem;
-    // if this is the first element in the list then it is also the head of the list
-    if (0 == p_list->size){
-        p_list->p_head = p_elem;
-    }
-    // adding a new element increases the size of the list
-    p_list->size++;
-    return p_elem;
+    // running the list_ins_next function with list tail as the element
+    // adds a new tail element
+    return list_ins_next(p_list, p_list->p_tail, p_data);
 }
 
 /*
@@ -169,14 +149,17 @@ elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data)
         // inserting anywhere else
         p_new_elem->p_prev = p_elem;
         p_new_elem->p_next = p_elem->p_next;
+        // check if inserting at the tail
+        if (NULL == p_new_elem->p_next){
+            p_list->p_tail = p_new_elem;
+        }
+        else {
+            // not inserting at the tail
+            p_elem->p_next->p_prev = p_new_elem;
+        }
     }
-    // check if inserting at the tail
-    if (NULL == p_new_elem->p_next){
-        p_list->p_tail = p_new_elem;
-    }
-    else {
-        // not inserting at the tail
-        p_elem->p_next->p_prev = p_new_elem;
+    if (NULL == p_list->p_tail){
+        p_list->p_tail = p_elem;
     }
     // the size of the list must now be increased
     p_list->size++;

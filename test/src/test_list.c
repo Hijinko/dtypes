@@ -6,15 +6,18 @@
 #include <stdint.h>
 
 static list * p_list = NULL;
-
-static int8_t test_search(const void * key1, const void * key2)
+static int8_t test_compare(const void * key1, const void * key2)
 {
     return (int8_t)(strcmp((char *)key1, (char *)key2));
 }
 
 static void start_list(void)
 {
-    p_list = list_init(NULL, test_search); 
+    p_list = list_init(NULL, test_compare); 
+    list_append(p_list, "Yo");
+    list_append(p_list, "She");
+    list_append(p_list, "He");
+    list_append(p_list, "They");
 }
 
 static void teardown_list(void)
@@ -22,12 +25,18 @@ static void teardown_list(void)
     list_destroy(p_list);
 }
 
+START_TEST(test_list_size){
+    ck_assert_int_eq(4, list_size(p_list));
+} END_TEST
+
 START_TEST(test_list_append){
     ck_assert(NULL != list_append(p_list, "HELLO"));
+    ck_assert_int_eq(5, list_size(p_list));
 } END_TEST
 
 START_TEST(test_list_prepend){
-    ck_assert(NULL != list_prepend(p_list, "HEY"));
+    ck_assert(NULL != list_prepend(p_list, "SUP"));
+    ck_assert_int_eq(5, list_size(p_list));
 } END_TEST
 
 // create suite
@@ -37,6 +46,7 @@ Suite * suite_list(void)
     TCase * p_core = tcase_create("Core");
     // add test cases 
     tcase_add_checked_fixture(p_core, start_list, teardown_list);
+    tcase_add_test(p_core, test_list_size);
     tcase_add_test(p_core, test_list_append);
     tcase_add_test(p_core, test_list_prepend);
     // add core to suite
