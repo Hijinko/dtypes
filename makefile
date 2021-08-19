@@ -30,16 +30,18 @@ $(TSTBIN)test_list.o: $(TSTSRC)test_list.c $(TSTINC)test_list.h
 ####################
 # libarary targets #
 ####################
-$(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o);
-$(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o);
+$(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o)
+$(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o)
 clean:
 	find . -type f -iname *.o -exec rm -rf {} \;
 	find . -type f -iname *.a -exec rm -rf {} \;
+	find . -type f -iname *.out -exec rm -rf {} \;
 	find . -type f -iname check_check -exec rm -rf {} \;
 debug: CMD += -g
 debug: clean all
 profile: CMD += -pg
-profile: debug
+profile: $(TST)check_check 
+	$(TST)check_check && gprof -T $(TST)check_check gmon.out
 check: CMD += -I $(TSTINC)
 check: debug $(TST)check_check
 check:
