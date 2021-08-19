@@ -64,6 +64,12 @@ START_TEST(test_list_next){
     ck_assert_str_eq("She", (char *)(list_data(list_next(list_head(p_list)))));
 } END_TEST
 
+START_TEST(test_list_copy){ 
+    list * p_copy = list_copy(p_list, NULL, NULL);
+    ck_assert_str_eq("Yo", (char *)(list_data(list_head(p_copy))));
+    list_destroy(p_copy);
+} END_TEST
+
 // create suite
 Suite * suite_list(void)
 {
@@ -80,6 +86,7 @@ Suite * suite_list(void)
     tcase_add_test(p_core, test_list_search);
     tcase_add_test(p_core, test_list_next);
     tcase_add_test(p_core, test_list_prev);
+    tcase_add_test(p_core, test_list_copy);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;

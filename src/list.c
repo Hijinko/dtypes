@@ -357,10 +357,32 @@ void list_iter(list * p_list, void (* p_func)(const void * p_data))
         // iterate through the list and run the function 
         elem * p_elem = p_list->p_head;
         for (; p_elem != NULL; p_elem = p_elem->p_next){
-                p_func(p_elem->p_data);
+            p_func(p_elem->p_data);
         }
     }
 }
 
-void list_sort(list * p_list);
-list * list_copy(list * p_list);
+/*
+ * @brief copies the values of a list to a new list
+ * @param p_list the list to copy 
+ * @param p_compare user defined function to compare the data in the list
+ * @param p_destroy user defined function destroy the data in the list
+ * @return pointer to a new list or NULL on error
+ */
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
+{
+    // cant copy from a NULL element
+    if (NULL == p_list){
+        return NULL;
+    }
+    list * p_list_copy = list_init(p_destroy, p_compare);
+    if (NULL == p_list){
+        return NULL;
+    }
+    // iterate through the list and create a new element in the list copy 
+    elem * p_elem = p_list->p_head;
+    for (; p_elem != NULL; p_elem = p_elem->p_next){
+        list_ins_next(p_list_copy, p_list_copy->p_tail, p_elem->p_data);
+    }
+    return p_list_copy;
+}
