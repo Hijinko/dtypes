@@ -39,6 +39,10 @@ START_TEST(test_list_prepend){
     ck_assert_int_eq(5, list_size(p_list));
 } END_TEST
 
+START_TEST(test_list_ins_next){
+   ck_assert(NULL != list_ins_next(p_list, NULL, "Yellow")); 
+} END_TEST
+
 // create suite
 Suite * suite_list(void)
 {
@@ -49,6 +53,7 @@ Suite * suite_list(void)
     tcase_add_test(p_core, test_list_size);
     tcase_add_test(p_core, test_list_append);
     tcase_add_test(p_core, test_list_prepend);
+    tcase_add_test(p_core, test_list_ins_next);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
