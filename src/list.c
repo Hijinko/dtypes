@@ -265,6 +265,31 @@ elem * list_tail(list * p_list)
 }
 
 /*
+ * @brief searches a list for a specified value
+ * @param p_list the list to search in
+ * @param p_data the data to search for
+ * @return pointer to the element that contains the data else NULL on error
+ */
+elem * list_search(list * p_list, const void * p_data)
+{
+    // cant search in a NULL or empty list or from NULL data 
+    if ((NULL == p_list) || (0 == p_list->size) || (NULL == p_data)){
+        return NULL;
+    }
+    // iterate through the list and compare the values
+    elem * p_elem = p_list->p_head;
+    for (; p_elem != NULL; p_elem = p_elem->p_next){
+        // equal values should return 0
+        if (0 == p_list->p_compare(p_elem->p_data, p_data)){
+            return p_elem;
+        }
+    }
+    // the full list was iterated through and no value matched so it doesn't exits
+    // in the list
+    return NULL;
+}
+
+/*
  * @brief gets the size of a list
  * @param p_list the list to get the size from
  * @return size of the list or -1 on error

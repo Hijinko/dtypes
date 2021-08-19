@@ -17,6 +17,7 @@ elem * list_remove(list * p_list, const void * p_data);
 // getters
 elem * list_head(list * p_list);
 elem * list_tail(list * p_list);
+elem * list_search(list * p_list, const void * p_data);
 int32_t list_size(list * p_list);
 const void * list_data(elem * p_elem);
 #endif
