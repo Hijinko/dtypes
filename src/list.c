@@ -265,6 +265,34 @@ elem * list_tail(list * p_list)
 }
 
 /*
+ * @brief gets the next element of another element 
+ * @param p_list the list to get the next element from
+ * @return pointer to the next element or NULL on error
+ */
+elem * list_next(elem * p_elem)
+{
+    // cant get the next element of a NULL element 
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_next;
+}
+
+/*
+ * @brief gets the previous element of another element 
+ * @param p_list the list to get the previous element from
+ * @return pointer to the previous element or NULL on error
+ */
+elem * list_prev(elem * p_elem)
+{
+    // cant get the next element of a NULL element 
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_prev;
+}
+
+/*
  * @brief searches a list for a specified value
  * @param p_list the list to search in
  * @param p_data the data to search for
