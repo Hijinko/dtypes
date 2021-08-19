@@ -39,8 +39,9 @@ clean:
 	find . -type f -iname check_check -exec rm -rf {} \;
 debug: CMD += -g
 debug: clean all
-profile: CMD += -pg
-profile: $(TST)check_check 
+profile: CMD += -pg -I $(TSTINC)
+profile: clean $(TST)check_check 
+profile: 
 	$(TST)check_check && gprof -T $(TST)check_check gmon.out
 check: CMD += -I $(TSTINC)
 check: debug $(TST)check_check
