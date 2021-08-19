@@ -56,6 +56,14 @@ START_TEST(test_list_search){
     ck_assert(NULL == list_search(p_list, "NOT_IN_LIST"));
 } END_TEST
 
+START_TEST(test_list_prev){ 
+    ck_assert_str_eq("He", (char *)(list_data(list_prev(list_tail(p_list)))));
+} END_TEST
+
+START_TEST(test_list_next){ 
+    ck_assert_str_eq("She", (char *)(list_data(list_next(list_head(p_list)))));
+} END_TEST
+
 // create suite
 Suite * suite_list(void)
 {
@@ -70,6 +78,8 @@ Suite * suite_list(void)
     tcase_add_test(p_core, test_list_head);
     tcase_add_test(p_core, test_list_tail);
     tcase_add_test(p_core, test_list_search);
+    tcase_add_test(p_core, test_list_next);
+    tcase_add_test(p_core, test_list_prev);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
