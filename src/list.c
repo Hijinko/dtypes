@@ -41,7 +41,7 @@ static elem * list_init_elem(const void * p_data)
     // an element needs to be created for the data
     elem * p_elem = calloc(1, sizeof(*p_elem));
     if (NULL == p_elem){
-        perror("list_append ");
+        perror("list_init ");
         return NULL;
     }
     // the values for the element need to be set
@@ -105,29 +105,9 @@ void list_destroy(list * p_list)
  */
 elem * list_append(list * p_list, const void * p_data)
 {
-    // cant append to A NULL list or from NULL data
-    if ((NULL == p_list) || (NULL == p_data)){
-        return NULL;
-    }
-    // an element needs to be created for the data
-    elem * p_elem = calloc(1, sizeof(*p_elem));
-    if (NULL == p_elem){
-        perror("list_append ");
-        return NULL;
-    }
-    // the values for the element need to be set
-    p_elem->p_data = p_data;
-    p_elem->p_prev = p_list->p_tail;
-    p_elem->p_next = NULL;
-    // appending new data will always update the list tail to the new element
-    p_list->p_tail = p_elem;
-    // if this is the first element in the list then it is also the head of the list
-    if (0 == p_list->size){
-        p_list->p_head = p_elem;
-    }
-    // adding a new element increases the size of the list
-    p_list->size++;
-    return p_elem;
+    // running the list_ins_next function with list tail as the element
+    // adds a new tail element
+    return list_ins_next(p_list, p_list->p_tail, p_data);
 }
 
 /*
@@ -158,27 +138,30 @@ elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data)
     }
     // an element needs to be created for the data
     elem * p_new_elem = list_init_elem(p_data); 
+    if (NULL == p_new_elem){
+        return NULL;
+    }
     // if the passed in element is NULL then the user is 
     // inserting at the head of the list
     if (NULL == p_elem){
+        // if this is not the first element then the previous head needs to
+        // set its prev value
+        if (0 != p_list->size){
+            p_list->p_head->p_prev = p_new_elem;
+        }
+        p_new_elem->p_next = p_list->p_head;    
         p_new_elem->p_prev = NULL;
-        p_new_elem->p_next = p_list->p_head;
         p_list->p_head = p_new_elem;
     }
     else {
-        // inserting anywhere else
-        p_new_elem->p_prev = p_elem;
         p_new_elem->p_next = p_elem->p_next;
+        p_elem->p_next = p_new_elem;
+        p_new_elem->p_prev = p_elem;
     }
-    // check if inserting at the tail
-    if (NULL == p_new_elem->p_next){
+    // check if inserting the new tail
+    if (p_list->p_tail == p_elem){
         p_list->p_tail = p_new_elem;
     }
-    else {
-        // not inserting at the tail
-        p_elem->p_next->p_prev = p_new_elem;
-    }
-    // the size of the list must now be increased
     p_list->size++;
     return p_new_elem;
 }
@@ -282,6 +265,59 @@ elem * list_tail(list * p_list)
 }
 
 /*
+ * @brief gets the next element of another element 
+ * @param p_list the list to get the next element from
+ * @return pointer to the next element or NULL on error
+ */
+elem * list_next(elem * p_elem)
+{
+    // cant get the next element of a NULL element 
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_next;
+}
+
+/*
+ * @brief gets the previous element of another element 
+ * @param p_list the list to get the previous element from
+ * @return pointer to the previous element or NULL on error
+ */
+elem * list_prev(elem * p_elem)
+{
+    // cant get the next element of a NULL element 
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_prev;
+}
+
+/*
+ * @brief searches a list for a specified value
+ * @param p_list the list to search in
+ * @param p_data the data to search for
+ * @return pointer to the element that contains the data else NULL on error
+ */
+elem * list_search(list * p_list, const void * p_data)
+{
+    // cant search in a NULL or empty list or from NULL data 
+    if ((NULL == p_list) || (0 == p_list->size) || (NULL == p_data)){
+        return NULL;
+    }
+    // iterate through the list and compare the values
+    elem * p_elem = p_list->p_head;
+    for (; p_elem != NULL; p_elem = p_elem->p_next){
+        // equal values should return 0
+        if (0 == p_list->p_compare(p_elem->p_data, p_data)){
+            return p_elem;
+        }
+    }
+    // the full list was iterated through and no value matched so it doesn't exits
+    // in the list
+    return NULL;
+}
+
+/*
  * @brief gets the size of a list
  * @param p_list the list to get the size from
  * @return size of the list or -1 on error
@@ -307,4 +343,46 @@ const void * list_data(elem * p_elem)
         return NULL;
     }
     return p_elem->p_data;
+}
+
+/*
+ * @brief iterates through a list and runs a user defined function on each elements data
+ * @param p_list the list to iterate through
+ * @param p_func the function to run on the data
+ */
+void list_iter(list * p_list, void (* p_func)(const void * p_data))
+{
+    // cant run a function on a NULL or empty list or a NULL function
+    if ((NULL != p_list) && (0 < p_list->size) && (NULL != p_func)){
+        // iterate through the list and run the function 
+        elem * p_elem = p_list->p_head;
+        for (; p_elem != NULL; p_elem = p_elem->p_next){
+            p_func(p_elem->p_data);
+        }
+    }
+}
+
+/*
+ * @brief copies the values of a list to a new list
+ * @param p_list the list to copy 
+ * @param p_compare user defined function to compare the data in the list
+ * @param p_destroy user defined function destroy the data in the list
+ * @return pointer to a new list or NULL on error
+ */
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
+{
+    // cant copy from a NULL element
+    if (NULL == p_list){
+        return NULL;
+    }
+    list * p_list_copy = list_init(p_destroy, p_compare);
+    if (NULL == p_list){
+        return NULL;
+    }
+    // iterate through the list and create a new element in the list copy 
+    elem * p_elem = p_list->p_head;
+    for (; p_elem != NULL; p_elem = p_elem->p_next){
+        list_ins_next(p_list_copy, p_list_copy->p_tail, p_elem->p_data);
+    }
+    return p_list_copy;
 }
