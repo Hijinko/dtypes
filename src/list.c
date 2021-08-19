@@ -130,7 +130,18 @@ elem * list_append(list * p_list, const void * p_data)
     return p_elem;
 }
 
-elem * list_prepend(list * p_list, const void * p_data);
+/*
+ * @brief adds a new element to the beginning of a list
+ * @param p_list the list to prepend to
+ * @param p_data the data in the new element
+ * @return pointer to the new element else NULL on error
+ */
+elem * list_prepend(list * p_list, const void * p_data)
+{
+    // running the list_ins_next function with NULL as the element
+    // adds a new head element
+    return list_ins_next(p_list, NULL, p_data);
+}
 
 /*
  * @brief adds a new element after the element passed in
