@@ -46,6 +46,12 @@ static inline member * set_next(member * p_member)
     return list_next(p_member);
 }
 
+/*
+ * @brief searches a set for a value
+ * @param p_set the set to search in
+ * @param p_data the data to search for in the set
+ * @return pointer to the member in the set else NULL
+ */
 static inline member * set_search(set * p_set, const void * p_data)
 {
     // search the set for the value
@@ -112,4 +118,25 @@ bool set_is_member(set * p_set, const void * p_data)
     return (NULL == set_search(p_set, p_data) ? false : true);
 }
 
-bool set_is_subset(set * p_org_set, set * p_sub_set);
+/*
+ * @brief checks if one set is a subset of another
+ * @param p_orig_set the set to check for the subset
+ * @param p_sub_set the set to check as a subset
+ * @return true if p_sub_set is a subset of p_orig_set else false
+ */
+bool set_is_subset(set * p_orig_set, set * p_sub_set)
+{
+    // cant get the subset of NULL sets or from an empty set
+    if ((NULL == p_orig_set) || (NULL == p_sub_set) || (0 > set_size(p_orig_set))){
+        return false;
+    }
+    // if any value in the subset is not in the original set then then p_sub_set is
+    // not a subset of p_orig_set
+    member * p_member = set_head(p_sub_set);
+    for (; NULL != p_member; p_member = set_next(p_member)){
+        if (NULL == set_search(p_orig_set, set_data(p_member))){
+            return false;
+        }
+    }
+    return true;
+}
