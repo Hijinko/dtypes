@@ -1,0 +1,79 @@
+.TH man 1 "18 AUGUST 2021" "1.0" "List Data Type"
+.SH NAME
+list - API for list data type
+.SH SYNOPSIS
+#include <list.h>
+
+typedef struct list list
+typedef struct elem elem
+.SH DESCRIPTION
+.PP
+Opaque doubly linked list data type
+.br
+provides functions to create, destroy and manipulate lists
+.SS List of Funtions 
+list * list_init(void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
+    creates and initializes a new list
+
+void list_destroy(list * p_list)
+    destroys a list and frees any allocated memory
+
+elem * list_append(list * p_list, const void * p_data)
+    adds a new element to the end of a list
+
+elem * list_prepend(list * p_list, const void * p_data)
+    adds a new element to the front of a list
+
+elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data)
+    adds a new element after the passed in element
+
+int8_t list_delete(list * p_list, elem * p_elem)
+    deletes an element from a list and frees the data in the element
+
+int8_t list_rm_next(list * p_list, elem * p_elem)
+    deletes the element after the passed in element in the list
+
+elem * list_remove(list * p_list, const void * p_data)
+    removes an element from the list but does not free the data
+
+elem * list_head(list * p_list)
+    gets the element at the head of the list
+
+elem * list_tail(list * p_list)
+    gets the element at the tail of the list
+
+elem * list_next(elem * p_elem)
+    gets the next element of the passed in element
+
+elem * list_prev(elem * p_prev)
+    gets the previous element of the passed in element
+
+elem * list_search(list * p_list, const void * p_data)
+    searches a list for the passed in data and returns the element that contains the data
+
+int32_t list_size(list * p_list)
+    gets the current size of the passed in list
+
+const void * list_data(elem * p_elem)
+    gets the data in a lists element
+
+void list_iter(list * p_list, void (* p_func)(const void * p_data))
+    iterates through a list and runs a user defined function on the data in each element
+
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
+    creates a new list with the data from the passed in list
+
+.SH EXAMPLES
+.SS Create a list
+.SH
+    list * p_list = list_init(NULL, NULL);
+.SS Destroy a list
+.SH
+    list_destroy(p_list);
+.SS Add an element to a list
+.SH
+    list_append(p_list, "Some Data");
+.SH BUGS
+No known bugs
+.SH AUTHOR
+Hijinko
