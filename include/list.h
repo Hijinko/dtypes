@@ -17,6 +17,12 @@ elem * list_remove(list * p_list, const void * p_data);
 // getters
 elem * list_head(list * p_list);
 elem * list_tail(list * p_list);
+elem * list_next(elem * p_elem);
+elem * list_prev(elem * p_prev);
+elem * list_search(list * p_list, const void * p_data);
 int32_t list_size(list * p_list);
 const void * list_data(elem * p_elem);
+// methods
+void list_iter(list * p_list, void (* p_func)(const void * p_data));
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2));
 #endif

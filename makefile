@@ -41,8 +41,6 @@ debug: clean all
 profile: CMD += -pg
 profile: debug
 check: CMD += -I $(TSTINC)
-check: $(TST)check_check
-valgrind: CMD += -g
-valgrind: clean check
-valgrind: 
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./test/check_check
+check: debug $(TST)check_check
+check:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes $(TST)check_check
