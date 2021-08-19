@@ -344,3 +344,23 @@ const void * list_data(elem * p_elem)
     }
     return p_elem->p_data;
 }
+
+/*
+ * @brief iterates through a list and runs a user defined function on each elements data
+ * @param p_list the list to iterate through
+ * @param p_func the function to run on the data
+ */
+void list_iter(list * p_list, void (* p_func)(const void * p_data))
+{
+    // cant run a function on a NULL or empty list or a NULL function
+    if ((NULL != p_list) && (0 < p_list->size) && (NULL != p_func)){
+        // iterate through the list and run the function 
+        elem * p_elem = p_list->p_head;
+        for (; p_elem != NULL; p_elem = p_elem->p_next){
+                p_func(p_elem->p_data);
+        }
+    }
+}
+
+void list_sort(list * p_list);
+list * list_copy(list * p_list);

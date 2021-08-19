@@ -22,4 +22,8 @@ elem * list_prev(elem * p_prev);
 elem * list_search(list * p_list, const void * p_data);
 int32_t list_size(list * p_list);
 const void * list_data(elem * p_elem);
+// methods
+void list_iter(list * p_list, void (* p_func)(const void * p_data));
+void list_sort(list * p_list);
+list * list_copy(list * p_list);
 #endif

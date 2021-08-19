@@ -43,5 +43,4 @@ profile: debug
 check: CMD += -I $(TSTINC)
 check: debug $(TST)check_check
 check:
-	$(TST)check_check
-#	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes $(TST)check_check
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes $(TST)check_check
