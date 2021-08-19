@@ -46,6 +46,12 @@ static inline member * set_next(member * p_member)
     return list_next(p_member);
 }
 
+static inline member * set_search(set * p_set, const void * p_data)
+{
+    // search the set for the value
+    return list_search(p_set, p_data);
+}
+
 /*
  * @brief gets the union of two sets
  * @param p_set1 the first set in the union
@@ -91,5 +97,19 @@ member * set_add(set * p_set, const void * p_data)
     return NULL;
 }
 
-bool * set_is_member(set * p_set, const void * p_data);
-bool * set_is_subset(set * p_org_set, set * p_sub_set);
+/*
+ * @brief checks if data is a member in a set
+ * @param p_set the set to check in
+ * @param p_data the data to check for in the set
+ * @return true if data is in the set else false
+ */
+bool set_is_member(set * p_set, const void * p_data)
+{
+    // cant get members in a NULL set or from NULL data
+    if ((NULL == p_set) || (NULL == p_data)){
+        return false;
+    }
+    return (NULL == set_search(p_set, p_data) ? false : true);
+}
+
+bool set_is_subset(set * p_org_set, set * p_sub_set);
