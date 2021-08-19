@@ -138,30 +138,30 @@ elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data)
     }
     // an element needs to be created for the data
     elem * p_new_elem = list_init_elem(p_data); 
+    if (NULL == p_new_elem){
+        return NULL;
+    }
     // if the passed in element is NULL then the user is 
     // inserting at the head of the list
     if (NULL == p_elem){
+        // if this is not the first element then the previous head needs to
+        // set its prev value
+        if (0 != p_list->size){
+            p_list->p_head->p_prev = p_new_elem;
+        }
+        p_new_elem->p_next = p_list->p_head;    
         p_new_elem->p_prev = NULL;
-        p_new_elem->p_next = p_list->p_head;
         p_list->p_head = p_new_elem;
     }
     else {
-        // inserting anywhere else
-        p_new_elem->p_prev = p_elem;
         p_new_elem->p_next = p_elem->p_next;
-        // check if inserting at the tail
-        if (NULL == p_new_elem->p_next){
-            p_list->p_tail = p_new_elem;
-        }
-        else {
-            // not inserting at the tail
-            p_elem->p_next->p_prev = p_new_elem;
-        }
+        p_elem->p_next = p_new_elem;
+        p_new_elem->p_prev = p_elem;
     }
-    if (NULL == p_list->p_tail){
-        p_list->p_tail = p_elem;
+    // check if inserting the new tail
+    if (p_list->p_tail == p_elem){
+        p_list->p_tail = p_new_elem;
     }
-    // the size of the list must now be increased
     p_list->size++;
     return p_new_elem;
 }
