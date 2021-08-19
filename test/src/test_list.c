@@ -51,6 +51,11 @@ START_TEST(test_list_tail){
     ck_assert_str_eq("They", (char *)(list_data(list_tail(p_list))));
 } END_TEST
 
+START_TEST(test_list_search){ 
+    ck_assert(NULL != list_search(p_list, "They"));
+    ck_assert(NULL == list_search(p_list, "NOT_IN_LIST"));
+} END_TEST
+
 // create suite
 Suite * suite_list(void)
 {
@@ -64,6 +69,7 @@ Suite * suite_list(void)
     tcase_add_test(p_core, test_list_ins_next);
     tcase_add_test(p_core, test_list_head);
     tcase_add_test(p_core, test_list_tail);
+    tcase_add_test(p_core, test_list_search);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
