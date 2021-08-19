@@ -31,6 +31,26 @@ struct list {
     elem * p_tail;
 };
 
+/*
+ * @brief create and initialize a list element
+ * @param p_data the data for the element
+ * @return pointer to the new element else NULL on error
+ */
+static elem * list_init_elem(const void * p_data)
+{
+    // an element needs to be created for the data
+    elem * p_elem = calloc(1, sizeof(*p_elem));
+    if (NULL == p_elem){
+        perror("list_append ");
+        return NULL;
+    }
+    // the values for the element need to be set
+    p_elem->p_data = p_data;
+    p_elem->p_prev = NULL;
+    p_elem->p_next = NULL;
+    return p_elem;
+}
+
 // setup functions
 
 /*
@@ -110,8 +130,58 @@ elem * list_append(list * p_list, const void * p_data)
     return p_elem;
 }
 
-elem * list_prepend(list * p_list, const void * p_data);
-elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data);
+/*
+ * @brief adds a new element to the beginning of a list
+ * @param p_list the list to prepend to
+ * @param p_data the data in the new element
+ * @return pointer to the new element else NULL on error
+ */
+elem * list_prepend(list * p_list, const void * p_data)
+{
+    // running the list_ins_next function with NULL as the element
+    // adds a new head element
+    return list_ins_next(p_list, NULL, p_data);
+}
+
+/*
+ * @brief adds a new element after the element passed in
+ * @param p_list the list to insert a new element into
+ * @param p_elem the element to insert after
+ * @param p_data the data in the new element
+ * @return pointer to the newly created element else NULL on error
+ */
+elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data)
+{
+    // cant insert into a NULL list or from NULL data
+    if ((NULL == p_list) || (NULL == p_data)){
+        return NULL;
+    }
+    // an element needs to be created for the data
+    elem * p_new_elem = list_init_elem(p_data); 
+    // if the passed in element is NULL then the user is 
+    // inserting at the head of the list
+    if (NULL == p_elem){
+        p_new_elem->p_prev = NULL;
+        p_new_elem->p_next = p_list->p_head;
+        p_list->p_head = p_new_elem;
+    }
+    else {
+        // inserting anywhere else
+        p_new_elem->p_prev = p_elem;
+        p_new_elem->p_next = p_elem->p_next;
+    }
+    // check if inserting at the tail
+    if (NULL == p_new_elem->p_next){
+        p_list->p_tail = p_new_elem;
+    }
+    else {
+        // not inserting at the tail
+        p_elem->p_next->p_prev = p_new_elem;
+    }
+    // the size of the list must now be increased
+    p_list->size++;
+    return p_new_elem;
+}
 // removing data
 
 /*
@@ -182,6 +252,59 @@ int8_t list_rm_next(list * p_list, elem * p_elem)
 
 elem * list_remove(list * p_list, const void * p_data);
 // getters
-elem * list_head(list * p_list);
-elem * list_tail(list * p_list);
-int32_t list_size(list * p_list);
+
+/*
+ * @brief gets the head of a list
+ * @param p_list the list to get the head from
+ * @return pointer to the head of the list or NULL on error
+ */
+elem * list_head(list * p_list)
+{
+    // cant get the head of a NULL list
+    if (NULL == p_list){
+        return NULL;
+    }
+    return p_list->p_head;
+}
+
+/*
+ * @brief gets the tail of a list
+ * @param p_list the list to get the tail from
+ * @return pointer to the tail of the list or NULL on error
+ */
+elem * list_tail(list * p_list)
+{
+    // cant get the tail of a NULL list
+    if (NULL == p_list){
+        return NULL;
+    }
+    return p_list->p_tail;
+}
+
+/*
+ * @brief gets the size of a list
+ * @param p_list the list to get the size from
+ * @return size of the list or -1 on error
+ */
+int32_t list_size(list * p_list)
+{
+    // cant get the size of a NULL list
+    if (NULL == p_list){
+        return -1;
+    }
+    return p_list->size;
+}
+
+/*
+ * @breif gets the data in a list element
+ * @param p_elem the element to get the data from
+ * @return pointer to the data in the element or NULL on error
+ */
+const void * list_data(elem * p_elem)
+{
+    // cant get the data from a NULL element
+    if (NULL == p_elem){
+        return NULL;
+    }
+    return p_elem->p_data;
+}
