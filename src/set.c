@@ -1,5 +1,6 @@
 #include <set.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /*
  * @brief adds a new member to the set
@@ -21,7 +22,7 @@ static inline member * set_insert(set * p_set, const void * p_data)
 static inline set * set_copy(set * p_set)
 {
     // copy the set
-    return list_copy(p_set, NULL, NULL);
+    return list_copy(p_set, NULL);
 }
 
 /*

@@ -24,5 +24,5 @@ int32_t list_size(list * p_list);
 const void * list_data(elem * p_elem);
 // methods
 void list_iter(list * p_list, void (* p_func)(const void * p_data));
-list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2));
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data));
 #endif

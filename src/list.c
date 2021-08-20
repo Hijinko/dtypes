@@ -365,17 +365,16 @@ void list_iter(list * p_list, void (* p_func)(const void * p_data))
 /*
  * @brief copies the values of a list to a new list
  * @param p_list the list to copy 
- * @param p_compare user defined function to compare the data in the list
  * @param p_destroy user defined function destroy the data in the list
  * @return pointer to a new list or NULL on error
  */
-list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data))
 {
     // cant copy from a NULL element
     if (NULL == p_list){
         return NULL;
     }
-    list * p_list_copy = list_init(p_destroy, p_compare);
+    list * p_list_copy = list_init(p_destroy, p_list->p_compare);
     if (NULL == p_list){
         return NULL;
     }
