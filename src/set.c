@@ -115,7 +115,32 @@ set * set_intersect(set * p_set1, set * p_set2)
  * @return a new set with the elements that are not in 
  *  both sets else NULL on error
  */
-set * set_difference(set * p_set1, set * p_set2);
+set * set_difference(set * p_set1, set * p_set2)
+{
+    // cant get the difference of NULL sets
+    if ((NULL == p_set1) || (NULL == p_set2)){
+        return NULL;
+    }
+    set * p_set_difference = set_init(NULL, NULL);
+    if (NULL == p_set_difference){
+        return NULL;
+    }
+    member * p_member = set_head(p_set1); 
+    // if a member in set1 is not in set2 then add to the list
+    for (; NULL != p_member; p_member = set_next(p_member)){
+        if (!(set_is_member(p_set2, set_data(p_member)))){
+            set_add(p_set_difference, set_data(p_member));
+        }
+    }
+    p_member = set_head(p_set2);
+    // now any member in set 2 that is not in the set_difference needs to be added
+    for (; NULL != p_member; p_member = set_next(p_member)){
+        if (!(set_is_member(p_set_difference, set_data(p_member)))){
+            set_add(p_set_difference, set_data(p_member));
+        }
+    }
+    return p_set_difference;
+}
 
 /*
  * @brief adds a new element to a set
