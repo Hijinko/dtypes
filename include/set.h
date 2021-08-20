@@ -10,6 +10,7 @@ set * set_difference(set * p_set1, set * p_set2);
 member * set_add(set * p_set, const void * p_data);
 bool set_is_member(set * p_set, const void * p_data);
 bool set_is_subset(set * p_orig_set, set * p_sub_set);
+bool set_is_equal(set * p_set1, set * p_set2);
 #define set_init list_init
 #define set_destroy list_destroy
 #define set_remove list_remove
