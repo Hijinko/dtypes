@@ -61,11 +61,9 @@ START_TEST(test_set_union){
 } END_TEST
 
 START_TEST(test_set_difference){
-/*
     set * p_set = set_difference(p_set1, p_set2);
     ck_assert_int_eq(5, set_size(p_set));
     set_destroy(p_set);
-*/
 } END_TEST
 
 START_TEST(test_set_is_member){

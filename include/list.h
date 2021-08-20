@@ -13,7 +13,7 @@ elem * list_ins_next(list * p_list, elem * p_elem, const void * p_data);
 // removing data
 int8_t list_delete(list * p_list, elem * p_elem);
 int8_t list_rm_next(list * p_list, elem * p_elem);
-elem * list_remove(list * p_list, const void * p_data);
+const void * list_remove(list * p_list, const void * p_data);
 // getters
 elem * list_head(list * p_list);
 elem * list_tail(list * p_list);

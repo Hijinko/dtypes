@@ -122,22 +122,19 @@ set * set_difference(set * p_set1, set * p_set2)
     if ((NULL == p_set1) || (NULL == p_set2)){
         return NULL;
     }
-    set * p_set_difference = set_init(NULL, NULL);
+    //set * p_set_difference = set_init(NULL, NULL);
+    set * p_set_difference = set_copy(p_set1);
     if (NULL == p_set_difference){
         return NULL;
     }
-    member * p_member = set_head(p_set1); 
-    // if a member in set1 is not in set2 then add to the list
-    for (; NULL != p_member; p_member = set_next(p_member)){
-        if (!(set_is_member(p_set2, set_data(p_member)))){
-            set_add(p_set_difference, set_data(p_member));
-        }
-    }
-    p_member = set_head(p_set2);
+    member * p_member = set_head(p_set2);
     // now any member in set 2 that is not in the set_difference needs to be added
     for (; NULL != p_member; p_member = set_next(p_member)){
-        if (!(set_is_member(p_set_difference, set_data(p_member)))){
+        if (false == set_is_member(p_set_difference, set_data(p_member))){
             set_add(p_set_difference, set_data(p_member));
+        }
+        else {
+            set_remove(p_set_difference, set_data(p_member));
         }
     }
     return p_set_difference;
