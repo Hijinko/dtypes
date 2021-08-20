@@ -65,7 +65,7 @@ START_TEST(test_list_next){
 } END_TEST
 
 START_TEST(test_list_copy){ 
-    list * p_copy = list_copy(p_list, NULL, NULL);
+    list * p_copy = list_copy(p_list, NULL);
     ck_assert_str_eq("Yo", (char *)(list_data(list_head(p_copy))));
     list_destroy(p_copy);
 } END_TEST

@@ -1,0 +1,67 @@
+.TH man 1 "19 AUGUST 2021" "1.0" "Set Data Type"
+.SH NAME
+Set - API for set data type
+.SH SYNOPSIS
+#include <set.h>
+
+typedef struct list set 
+typedef struct elem member
+.SH DESCRIPTION
+.PP
+Opaque set data type that is a special list
+.br
+provides functions to create, destroy and manipulate lists
+.SS List of Funtions 
+set * set_union(set * p_set1, set * p_set2);
+    gets the union of two sets
+
+set * set_intersect(set * p_set1, set * p_set2);
+    gets the intersection of two sets
+
+set * set_difference(set * p_set1, set * p_set2);
+    gets the difference of two sets
+
+member * set_add(set * p_set, const void * p_data);
+    adds a new member to a set
+
+bool set_is_member(set * p_set, const void * p_data);
+    checks if data exists in a set
+
+bool set_is_subset(set * p_orig_set, set * p_sub_set);
+    checks if sub_set is a subset of orig_set
+
+bool set_is_equal(set * p_set1, set * p_set2);
+    checks if set2 is equal to set1
+
+#define set_init list_init
+    initializes a set data type (see list_init)
+
+#define set_destroy list_destroy
+    destroys a set data type (see list_destroy)
+
+#define set_remove list_remove
+    removes a member from a set but keeps the data (see list_remove)
+
+#define set_delete list_delete
+    deletes a member from a set and frees the data if defined (see list_delete)
+
+#define set_data list_data
+    gets the data from a set member (see list_data)
+
+#define set_size list_size
+    gets the size of the set (see list_size)
+
+.SH EXAMPLES
+.SS Create a set
+.SH
+    set * p_set = set_init(NULL, NULL);
+.SS Destroy a set
+.SH
+    set_destroy(p_set);
+.SS Add an element to a set 
+.SH
+    set_add(p_set, "Some Data");
+.SH BUGS
+No known bugs
+.SH AUTHOR
+Hijinko
