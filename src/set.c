@@ -199,3 +199,19 @@ bool set_is_subset(set * p_orig_set, set * p_sub_set)
     }
     return true;
 }
+
+/*
+ * @brief checks if two sets are equal to each other
+ * @param p_set1 first set to check for equality
+ * @param p_set2 second set to check for equality
+ * @return true if the sets are equal else false
+ */
+bool set_is_equal(set * p_set1, set * p_set2)
+{
+    // sets can't be equal if they are NULL or if the dont have the same size 
+    if ((NULL == p_set1) || (NULL == p_set2) || (set_size(p_set1) != set_size(p_set2))){
+        return false;
+    }
+    // sets with the same size are equal if they are both subsets of each other
+    return (set_is_subset(p_set1, p_set2) && set_is_subset(p_set2, p_set1));
+}
