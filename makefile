@@ -28,11 +28,13 @@ $(TSTBIN)check_check.o: $(TSTSRC)check_check.c
 	$(CMD) -c $^ -o $@
 $(TSTBIN)test_list.o: $(TSTSRC)test_list.c $(TSTINC)test_list.h
 	$(CMD) -c $< -o $@ 
+$(TSTBIN)test_set.o: $(TSTSRC)test_set.c $(TSTINC)test_set.h
+	$(CMD) -c $< -o $@ 
 
 ####################
 # libarary targets #
 ####################
-$(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o)
+$(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o $(TSTBIN)test_set.o)
 $(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o $(BIN)set.o)
 clean:
 	find . -type f -iname *.o -exec rm -rf {} \;

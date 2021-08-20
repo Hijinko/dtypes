@@ -233,7 +233,49 @@ int8_t list_rm_next(list * p_list, elem * p_elem)
     return list_delete(p_list, p_old_elem);
 }
 
-elem * list_remove(list * p_list, const void * p_data);
+/*
+ * @brief removes data from a list but does not free the data
+ * @param p_list the list the element to remove is in
+ * @param p_elem the element to remove 
+ * @return pointer to the data in the element else NULL on error 
+ */
+const void * list_remove(list * p_list, const void * p_data)
+{
+    // cant delete an element from a NULL or empty list or from NULL data
+    if ((NULL == p_list) || (0 >= p_list->size) || (NULL == p_data)){
+        return NULL; 
+    }
+    elem * p_elem = list_search(p_list, p_data);
+    if (NULL == p_elem){
+        return NULL;
+    }
+    // if the element to be removed is the head then ensure a new head is updated
+    if (p_list->p_head == p_elem){
+        p_list->p_head = p_elem->p_next;
+    }
+    // if the element to be removed is the tail then ensure a new head is updated
+    if (p_list->p_tail == p_elem){
+        p_list->p_tail = p_elem->p_prev;
+    }
+    // get the pointers to the next and previous elements
+    elem * p_prev_elem = p_elem->p_prev;
+    elem * p_next_elem = p_elem->p_next;
+    // cant set the next pointer of a NULL element
+    if (NULL != p_prev_elem){
+        p_prev_elem->p_next = p_next_elem;
+    }
+    // cant set the prev pointer of a NULL element
+    if (NULL != p_next_elem){
+        p_next_elem->p_prev = p_prev_elem;
+    }
+    const void * p_element_data = p_elem->p_data;
+    // free the element
+    free(p_elem);
+    // the size of the list has to be decreased
+    p_list->size--;
+    return p_element_data;
+}
+
 // getters
 
 /*
@@ -365,17 +407,16 @@ void list_iter(list * p_list, void (* p_func)(const void * p_data))
 /*
  * @brief copies the values of a list to a new list
  * @param p_list the list to copy 
- * @param p_compare user defined function to compare the data in the list
  * @param p_destroy user defined function destroy the data in the list
  * @return pointer to a new list or NULL on error
  */
-list * list_copy(list * p_list, void (* p_destroy)(void * p_data), int8_t (* p_compare)(const void * p_key1, const void * p_key2))
+list * list_copy(list * p_list, void (* p_destroy)(void * p_data))
 {
     // cant copy from a NULL element
     if (NULL == p_list){
         return NULL;
     }
-    list * p_list_copy = list_init(p_destroy, p_compare);
+    list * p_list_copy = list_init(p_destroy, p_list->p_compare);
     if (NULL == p_list){
         return NULL;
     }
