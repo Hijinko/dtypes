@@ -80,7 +80,41 @@ set * set_union(set * p_set1, set * p_set2)
     }
     return p_union_set;
 }
-set * set_intersect(set * p_set1, set * p_set2);
+
+/*
+ * @brief gets the intersect of two sets
+ * @param p_set1 the first set to get the intersect
+ * @param p_set2 the second set to get the intersect
+ * @return a new set with the intersect members of the 
+ *  two sets else NULL on error
+ */
+set * set_intersect(set * p_set1, set * p_set2)
+{
+    // cant get the intersect of NULL sets
+    if ((NULL == p_set1) || (NULL == p_set2)){
+        return NULL;
+    }
+    set * p_set_intersect = set_init(NULL, NULL);
+    if (NULL == p_set_intersect){
+        return NULL;
+    }
+    // iterate through both sets and see any members are in both sets
+    member * p_member1 = set_head(p_set1); 
+    for (; NULL != p_member1; p_member1 = set_next(p_member1)){
+        if (set_is_member(p_set2, set_data(p_member1))){
+            set_add(p_set_intersect, set_data(p_member1));
+        }
+    }
+    return p_set_intersect;
+}
+
+/*
+ * @brief gets the difference of two sets
+ * @param p_set1 the first set to get the difference
+ * @param p_set2 the second set to get the difference
+ * @return a new set with the elements that are not in 
+ *  both sets else NULL on error
+ */
 set * set_difference(set * p_set1, set * p_set2);
 
 /*
