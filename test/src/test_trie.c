@@ -25,9 +25,11 @@ static void teardown_trie(void)
 }
 
 START_TEST(test_trie_init){
-    trie * p_trie1 = trie_init(NULL, NULL);
+    trie * p_trie1 = trie_init(NULL, test_compare);
     ck_assert(NULL != p_trie1);
     trie_destroy(p_trie1);
+    trie * p_trie2 = trie_init(NULL, NULL);
+    ck_assert(NULL == p_trie2);
 } END_TEST
 
 // create suite
