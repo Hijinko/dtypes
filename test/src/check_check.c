@@ -14,7 +14,7 @@ int main(void)
     srunner_add_suite(p_srunner, p_set);
     srunner_set_fork_status(p_srunner, CK_NOFORK);
     // run all test
-    srunner_run_all(p_srunner, CK_NORMAL);
+    srunner_run_all(p_srunner, CK_VERBOSE);
     // save the number of test failed
     num_failed = srunner_ntests_failed(p_srunner);
     srunner_free(p_srunner);

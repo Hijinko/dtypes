@@ -128,7 +128,8 @@ set * set_difference(set * p_set1, set * p_set2)
         return NULL;
     }
     member * p_member = set_head(p_set2);
-    // now any member in set 2 that is not in the set_difference needs to be added
+    // now any member in set 2 that is not in the set_difference
+    // needs to be added
     for (; NULL != p_member; p_member = set_next(p_member)){
         if (false == set_is_member(p_set_difference, set_data(p_member))){
             set_add(p_set_difference, set_data(p_member));
@@ -152,7 +153,8 @@ member * set_add(set * p_set, const void * p_data)
     if ((NULL == p_set) || (NULL == p_data)){
         return NULL;
     }
-    // new members can only be added to the set if the data doesn't already exist in the set
+    // new members can only be added to the set if the data
+    // doesn't already exist in the set
     if (false == set_is_member(p_set, p_data)){
         return set_insert(p_set, p_data);
     }
@@ -184,10 +186,12 @@ bool set_is_member(set * p_set, const void * p_data)
 bool set_is_subset(set * p_orig_set, set * p_sub_set)
 {
     // cant get the subset of NULL sets or from an empty set
-    if ((NULL == p_orig_set) || (NULL == p_sub_set) || (0 > set_size(p_orig_set))){
+    if ((NULL == p_orig_set) || (NULL == p_sub_set) || 
+        (0 > set_size(p_orig_set))){
         return false;
     }
-    // if any value in the subset is not in the original set then then p_sub_set is
+    // if any value in the subset is not in the original
+    // set then then p_sub_set is
     // not a subset of p_orig_set
     member * p_member = set_head(p_sub_set);
     for (; NULL != p_member; p_member = set_next(p_member)){
@@ -207,7 +211,8 @@ bool set_is_subset(set * p_orig_set, set * p_sub_set)
 bool set_is_equal(set * p_set1, set * p_set2)
 {
     // sets can't be equal if they are NULL or if the dont have the same size 
-    if ((NULL == p_set1) || (NULL == p_set2) || (set_size(p_set1) != set_size(p_set2))){
+    if ((NULL == p_set1) || (NULL == p_set2) ||
+        (set_size(p_set1) != set_size(p_set2))){
         return false;
     }
     // sets with the same size are equal if they are both subsets of each other
