@@ -48,6 +48,8 @@ profile: clean $(TST)check_check
 profile: 
 	$(TST)check_check && gprof -T $(TST)check_check gmon.out
 check: CMD += -I $(TSTINC)
-check: debug $(TST)check_check
-check:
+check: clean $(TST)check_check
+	$(TST)check_check
+valgrind: CMD += -I $(TSTINC)
+valgrind: debug $(TST)check_check
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes $(TST)check_check
