@@ -19,7 +19,7 @@ static int8_t test_compare(const void * key1, const void * key2)
     return (num1 < num2) ? -1: ((num1 == num2) ? 0: 1);
 }
 
-static void start_set(void)
+static void start_queue(void)
 {
     p_queue = queue_init(NULL, test_compare); 
     queue_enqueue(p_queue, &num1);
@@ -29,7 +29,7 @@ static void start_set(void)
     queue_enqueue(p_queue, &num5);
 }
 
-static void teardown_set(void)
+static void teardown_queue(void)
 {
     queue_destroy(p_queue);
 }
@@ -59,7 +59,7 @@ Suite * suite_queue(void)
     Suite * p_suite = suite_create("Queue");
     TCase * p_core = tcase_create("Core");
     // add test cases 
-    tcase_add_checked_fixture(p_core, start_set, teardown_set);
+    tcase_add_checked_fixture(p_core, start_queue, teardown_queue);
     tcase_add_test(p_core, test_queue_init);
     tcase_add_test(p_core, test_queue_size);
     tcase_add_test(p_core, test_queue_peek);

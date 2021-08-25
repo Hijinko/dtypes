@@ -20,6 +20,8 @@ $(BIN)set.o: $(SRC)set.c $(INC)set.h $(BIN)list.o
 	$(CMD) -c $< -o $@
 $(BIN)queue.o: $(SRC)queue.c $(INC)queue.h $(BIN)queue.o
 	$(CMD) -c $< -o $@
+$(BIN)trie.o: $(SRC)trie.c $(INC)trie.h $(BIN)trie.o
+	$(CMD) -c $< -o $@
 
 ################
 # test targets #
@@ -34,13 +36,16 @@ $(TSTBIN)test_set.o: $(TSTSRC)test_set.c $(TSTINC)test_set.h
 	$(CMD) -c $< -o $@ 
 $(TSTBIN)test_queue.o: $(TSTSRC)test_queue.c $(TSTINC)test_queue.h
 	$(CMD) -c $< -o $@ 
+$(TSTBIN)test_trie.o: $(TSTSRC)test_trie.c $(TSTINC)test_trie.h
+	$(CMD) -c $< -o $@ 
 
 ####################
 # libarary targets #
 ####################
 $(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o\
-	$(TSTBIN)test_set.o $(TSTBIN)test_queue.o)
-$(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o $(BIN)set.o $(BIN)queue.o)
+	$(TSTBIN)test_set.o $(TSTBIN)test_queue.o $(TSTBIN)test_trie.o)
+$(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o $(BIN)set.o\
+	$(BIN)queue.o $(BIN)trie.o)
 clean:
 	find . -type f -iname *.o -exec rm -rf {} \;
 	find . -type f -iname *.a -exec rm -rf {} \;
