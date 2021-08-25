@@ -34,6 +34,12 @@ static void teardown_set(void)
     queue_destroy(p_queue);
 }
 
+START_TEST(test_queue_init){
+    queue * p_queue1 = queue_init(NULL, NULL);
+    ck_assert(NULL != p_queue1);
+    queue_destroy(p_queue1);
+} END_TEST
+
 START_TEST(test_queue_size){
     ck_assert_int_eq(5, queue_size(p_queue));
 } END_TEST
@@ -54,6 +60,7 @@ Suite * suite_queue(void)
     TCase * p_core = tcase_create("Core");
     // add test cases 
     tcase_add_checked_fixture(p_core, start_set, teardown_set);
+    tcase_add_test(p_core, test_queue_init);
     tcase_add_test(p_core, test_queue_size);
     tcase_add_test(p_core, test_queue_peek);
     tcase_add_test(p_core, test_queue_dequeue);
