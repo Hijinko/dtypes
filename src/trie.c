@@ -3,13 +3,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+ * @brief trie node structure
+ * @param p_data pointer to the data the node holds
+ * @param p_parent the parent node of the current node
+ * @param nodes an array of node children that the current node is a parent of
+ */
 struct node {
     const void * p_data;
     struct node * p_parent;
-    struct node * p_left;
-    struct node * p_right;
+    node ** nodes;
 };
 
+/*
+ * @brief a trie structure
+ * @param size the number of nodes in the trie
+ * @param p_root the root node of the trie
+ * @param destroy user defined function to free any allocated data
+ * @param compare user defined function to compare to node values
+ *  should return -1, 0, 1 if key1 is less than, equal to or greater than key2
+ */
 struct trie {
     int64_t size;
     node * p_root;
@@ -17,6 +30,12 @@ struct trie {
     int8_t (* compare)(const void *p_key1, const void *p_key2);
 };
 
+/*
+ * @brief creates and initializes a new trie structure
+ * @param destroy user defined function to free any allocated data
+ * @param compare user defined function to compare to node values
+ *  should return -1, 0, 1 if key1 is less than, equal to or greater than key2
+ */
 trie * trie_init(void (* destroy)(const void *p_data),
                 int8_t (* compare)(const void *p_key1, const void *p_key2))
 {
@@ -37,6 +56,10 @@ trie * trie_init(void (* destroy)(const void *p_data),
     return p_trie;
 }
 
+/*
+ * @brief tears down a trie structure and frees any allocated memory
+ * @param p_trie the trie to tear down
+ */
 void trie_destroy(trie * p_trie)
 {
     // cant tear down a trie that is NULL
@@ -44,4 +67,15 @@ void trie_destroy(trie * p_trie)
         return;
     }
     free(p_trie);
+}
+
+/*
+ * @brief adds a new node to a trie
+ * @param p_trie the trie to add a node to
+ * @param p_data the data to add to the node 
+ * @return pointer to the last node that holds all the data or NULL on error
+ */
+node * trie_insert(trie * p_trie, const void *p_data)
+{
+    return NULL;
 }

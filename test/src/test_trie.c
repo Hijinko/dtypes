@@ -9,9 +9,9 @@ static trie * p_trie = NULL;
 
 static int8_t test_compare(const void * key1, const void * key2)
 {
-    int num1 = *(int *)key1;
-    int num2 = *(int *)key2;
-    return (num1 < num2) ? -1: ((num1 == num2) ? 0: 1);
+    char * str1 = (char *)key1;
+    char * str2 = (char *)key2;
+    return strcmp(str1, str2);
 }
 
 static void start_trie(void)
@@ -32,6 +32,10 @@ START_TEST(test_trie_init){
     ck_assert(NULL == p_trie2);
 } END_TEST
 
+START_TEST(test_trie_insert){
+    ck_assert(NULL != trie_insert(p_trie, "a"));
+} END_TEST
+
 // create suite
 Suite * suite_trie(void)
 {
@@ -40,6 +44,7 @@ Suite * suite_trie(void)
     // add test cases 
     tcase_add_checked_fixture(p_core, start_trie, teardown_trie);
     tcase_add_test(p_core, test_trie_init);
+    tcase_add_test(p_core, test_trie_insert);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
