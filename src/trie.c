@@ -31,6 +31,30 @@ struct trie {
 };
 
 /*
+ * @brief creates and initializes a trie node
+ * @param p_data pointer to the data in the node
+ * @return pointer to the newly created node
+ */
+static node * node_init(const void * p_data)
+{
+    // allocate a new node
+    node * p_node = calloc(1, sizeof(*p_node));
+    if (NULL == p_node){
+        return NULL;
+    }
+    // if the data is NULL then we are creating a root node
+    if (NULL == p_data){
+        p_node->p_data = "*";   
+    }
+    else {
+        p_node->p_data = p_data;
+    }
+    p_node->p_parent = NULL;    
+    p_node->nodes = NULL;
+    return p_node;
+}
+
+/*
  * @brief creates and initializes a new trie structure
  * @param destroy user defined function to free any allocated data
  * @param compare user defined function to compare to node values
