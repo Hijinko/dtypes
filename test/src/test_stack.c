@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 static stack * p_stack = NULL;
+int num = 1;
 
 static int8_t test_compare(const void * key1, const void * key2)
 {
@@ -17,6 +18,7 @@ static int8_t test_compare(const void * key1, const void * key2)
 static void start_stack(void)
 {
     p_stack = stack_init(NULL, test_compare); 
+    stack_push(p_stack, &num);
 }
 
 static void teardown_stack(void)
@@ -36,6 +38,11 @@ START_TEST(test_stack_push)
     ck_assert_int_eq(10, *(int *)(stack_data(stack_peek(p_stack))));
 } END_TEST
 
+START_TEST(test_stack_pop)
+{
+    ck_assert_int_eq(num, *(int *)(stack_pop(p_stack)));
+} END_TEST
+
 // create suite
 Suite * suite_stack(void)
 {
@@ -45,6 +52,7 @@ Suite * suite_stack(void)
     tcase_add_checked_fixture(p_core, start_stack, teardown_stack);
     tcase_add_test(p_core, test_stack_init);
     tcase_add_test(p_core, test_stack_push);
+    tcase_add_test(p_core, test_stack_pop);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
