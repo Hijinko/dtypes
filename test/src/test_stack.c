@@ -24,9 +24,16 @@ static void teardown_stack(void)
     stack_destroy(p_stack);
 }
 
-START_TEST(test_stack_init){
+START_TEST(test_stack_init)
+{
     ck_assert(NULL != p_stack);
-    queue_destroy(p_stack);
+} END_TEST
+
+START_TEST(test_stack_push)
+{
+    int num10 = 10;
+    ck_assert(NULL != stack_push(p_stack, &num10));
+    ck_assert_int_eq(10, *(int *)(set_data(set_peek(p_stack))))
 } END_TEST
 
 // create suite

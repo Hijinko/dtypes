@@ -18,9 +18,9 @@ $(BIN)list.o: $(SRC)list.c $(INC)list.h
 	$(CMD) -c $< -o $@
 $(BIN)set.o: $(SRC)set.c $(INC)set.h $(BIN)list.o
 	$(CMD) -c $< -o $@
-$(BIN)queue.o: $(SRC)queue.c $(INC)queue.h $(BIN).list.o
+$(BIN)queue.o: $(SRC)queue.c $(INC)queue.h $(BIN)list.o
 	$(CMD) -c $< -o $@
-$(BIN)stack.o: $(SRC)stack.c $(INC)stack.h $(BIN).list.o
+$(BIN)stack.o: $(SRC)stack.c $(INC)stack.h $(BIN)list.o
 	$(CMD) -c $< -o $@
 
 ################
