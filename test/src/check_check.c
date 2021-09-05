@@ -3,6 +3,7 @@
 #include <test_list.h>
 #include <test_set.h>
 #include <test_queue.h>
+#include <test_stack.h>
 
 int main(void)
 {
@@ -11,10 +12,12 @@ int main(void)
     Suite * p_list = suite_list();
     Suite * p_set = suite_set();
     Suite * p_queue = suite_queue();
+    Suite * p_stack = suite_stack();
     // create and add to suite runner
     SRunner * p_srunner = srunner_create(p_list);
     srunner_add_suite(p_srunner, p_set);
     srunner_add_suite(p_srunner, p_queue);
+    srunner_add_suite(p_srunner, p_stack);
     srunner_set_fork_status(p_srunner, CK_NOFORK);
     // run all test
     srunner_run_all(p_srunner, CK_VERBOSE);
