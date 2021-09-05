@@ -5,7 +5,7 @@ A repository of different data types that are not standard in the C library i.e.
 
 ## Implemented Data Types
 - [x] list
-- [ ] stack
+- [x] stack
 - [x] queu
 - [x] set
 - [ ] tree

@@ -18,7 +18,9 @@ $(BIN)list.o: $(SRC)list.c $(INC)list.h
 	$(CMD) -c $< -o $@
 $(BIN)set.o: $(SRC)set.c $(INC)set.h $(BIN)list.o
 	$(CMD) -c $< -o $@
-$(BIN)queue.o: $(SRC)queue.c $(INC)queue.h $(BIN)queue.o
+$(BIN)queue.o: $(SRC)queue.c $(INC)queue.h $(BIN)list.o
+	$(CMD) -c $< -o $@
+$(BIN)stack.o: $(SRC)stack.c $(INC)stack.h $(BIN)list.o
 	$(CMD) -c $< -o $@
 
 ################
@@ -34,13 +36,20 @@ $(TSTBIN)test_set.o: $(TSTSRC)test_set.c $(TSTINC)test_set.h
 	$(CMD) -c $< -o $@ 
 $(TSTBIN)test_queue.o: $(TSTSRC)test_queue.c $(TSTINC)test_queue.h
 	$(CMD) -c $< -o $@ 
+$(TSTBIN)test_stack.o: $(TSTSRC)test_stack.c $(TSTINC)test_stack.h
+	$(CMD) -c $< -o $@ 
 
 ####################
 # libarary targets #
 ####################
 $(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o\
-	$(TSTBIN)test_set.o $(TSTBIN)test_queue.o)
-$(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o $(BIN)set.o $(BIN)queue.o)
+	$(TSTBIN)test_set.o $(TSTBIN)test_queue.o $(TSTBIN)test_stack.o)
+$(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o $(BIN)set.o $(BIN)queue.o\
+	$(BIN)stack.o)
+
+#######################
+# environment targets #
+#######################
 clean:
 	find . -type f -iname *.o -exec rm -rf {} \;
 	find . -type f -iname *.a -exec rm -rf {} \;
