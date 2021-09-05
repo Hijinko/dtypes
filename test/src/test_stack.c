@@ -33,7 +33,7 @@ START_TEST(test_stack_push)
 {
     int num10 = 10;
     ck_assert(NULL != stack_push(p_stack, &num10));
-    ck_assert_int_eq(10, *(int *)(set_data(set_peek(p_stack))))
+    ck_assert_int_eq(10, *(int *)(stack_data(stack_peek(p_stack))));
 } END_TEST
 
 // create suite
@@ -44,6 +44,7 @@ Suite * suite_stack(void)
     // add test cases 
     tcase_add_checked_fixture(p_core, start_stack, teardown_stack);
     tcase_add_test(p_core, test_stack_init);
+    tcase_add_test(p_core, test_stack_push);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
