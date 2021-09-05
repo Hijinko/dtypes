@@ -1,3 +1,5 @@
+[![version](https://img.shields.io/badge/version-1.2-yellow.svg)](https://semver.org)
+
 # dtypes
 A repository of different data types that are not standard in the C library i.e. Lists, Trees, Graphs etc.
 
