@@ -10,6 +10,7 @@ hashtbl * hashtbl_init(int64_t buckets,
                                             const void * p_key2));
 void hashtbl_destroy(hashtbl * p_hashtbl);
 int64_t hashtbl_size(hashtbl * p_hashtbl);
-elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_data);
+elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key,
+                      const void * p_value);
 #define hashtbl_data list_data
 #endif
