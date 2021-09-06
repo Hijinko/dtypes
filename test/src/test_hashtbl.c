@@ -29,7 +29,9 @@ START_TEST(test_hashtbl_size)
 
 START_TEST(test_hashtbl_insert)
 {
-    ck_assert(NULL != hashtbl_insert(p_hashtbl, "Hello"));     
+    ck_assert_int_eq(0, strcmp("Hello", 
+                              (char *)hashtbl_data(hashtbl_insert(p_hashtbl, 
+                                                                  "Hello"))));     
     ck_assert_int_eq(1, hashtbl_size(p_hashtbl));
 } END_TEST
 

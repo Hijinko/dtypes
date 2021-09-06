@@ -44,7 +44,7 @@ struct hashtbl {
     int64_t buckets;
     int64_t size;
     int64_t (* p_hash)(const void * p_key);
-    void (* p_destroy)(const void * p_data);
+    void (* p_destroy)(void * p_data);
     int8_t (* p_compare)(const void * p_key1, const void * p_key2);
     list ** pp_table;
 };
@@ -59,7 +59,7 @@ struct hashtbl {
  */
 hashtbl * hashtbl_init(int64_t buckets,
                        int64_t (* p_hash)(const void * p_key),
-                       void (* p_destroy)(const void * p_data),
+                       void (* p_destroy)(void * p_data),
                        int8_t (* p_compare)(const void * p_key1,
                                             const void * p_key2))
 {
@@ -130,5 +130,20 @@ int64_t hashtbl_size(hashtbl * p_hashtbl)
 
 elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_data)
 {
-    return NULL;
+    // can't insert into a NULL hash table or from NULL data
+    if ((NULL == p_hashtbl) || (NULL == p_data)){
+        return NULL;
+    }
+    // compute the hash of the data
+    int64_t bucket = p_hashtbl->p_hash(p_data) % p_hashtbl->buckets;
+    // if the bucket in the table is NULL then a new list has to be initialized
+    if (NULL == p_hashtbl->pp_table[bucket]){
+        p_hashtbl->pp_table[bucket] = list_init(p_hashtbl->p_destroy,
+                                                p_hashtbl->p_compare);
+    }
+    // the data can now be inserted into the list at the bucket in the table
+    elem * p_elem = list_prepend(p_hashtbl->pp_table[bucket], p_data);
+    // the size of the hash table has to be increased
+    p_hashtbl->size++;
+    return p_elem;
 }
