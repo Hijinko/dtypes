@@ -50,6 +50,16 @@ struct hashtbl {
 };
 
 /*
+ * @brief the element in the hash table that holds each key and value pair
+ * @param p_key a unique key for each data in the table
+ * @param p_value the data that the key points to
+ */
+struct hashtbl_elem {
+    const void * p_key;
+    const void * p_value;
+};
+
+/*
  * @brief creates and initializes a hash table
  * @param buckets int6_t that is the number of spaces in the hash table
  * @param p_hash a user defined hashing function to classify the data
@@ -134,7 +144,7 @@ int64_t hashtbl_size(hashtbl * p_hashtbl)
     return p_hashtbl->size;
 }
 
-elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key, 
+hashtbl_elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key, 
                       const void * p_value)
 {
     // can't insert into a NULL hash table or from NULL key
@@ -148,9 +158,29 @@ elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key,
         p_hashtbl->pp_table[bucket] = list_init(p_hashtbl->p_destroy,
                                                 p_hashtbl->p_compare);
     }
+    // a hashtbl element has to be allocated with the new data
+    hashtbl_elem * p_hashtbl_elem = calloc(1, sizeof(*p_hashtbl_elem));
+    if (NULL == p_hashtbl_elem){
+        return NULL;
+    }
     // the data can now be inserted into the list at the bucket in the table
-    elem * p_elem = list_prepend(p_hashtbl->pp_table[bucket], p_value);
+    p_hashtbl_elem->p_key = p_key;
+    p_hashtbl_elem->p_value = p_value;
+    elem * p_elem = list_prepend(p_hashtbl->pp_table[bucket], p_hashtbl_elem);
     // the size of the hash table has to be increased
     p_hashtbl->size++;
-    return p_elem;
+    return (hashtbl_elem *)list_data(p_elem);
+}
+
+/*
+ * @brief gets the value from a hashtbl_elem structure
+ * @param p_hashtble_elem the element to get the value from
+ */
+const void * hashtbl_data(hashtbl_elem * p_hashtbl_elem)
+{
+    // cant get the value from a NULL element
+    if (NULL == p_hashtbl_elem){
+        return NULL;
+    }
+    return p_hashtbl_elem->p_value;
 }
