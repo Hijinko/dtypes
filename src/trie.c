@@ -66,7 +66,7 @@ static node * node_init(const void * p_data)
         p_node->p_data = p_data;
     }
     p_node->p_parent = NULL;    
-    p_node->p_nodes = hashtbl_init(255, NULL, NULL, trie_compare);
+    p_node->p_nodes = hashtbl_init(255, NULL, free, trie_compare);
     return p_node;
 }
 
@@ -106,6 +106,10 @@ void trie_destroy(trie * p_trie)
     if (NULL == p_trie){
         return;
     }
+    node * p_cur_node = p_trie->p_root;
+    // TODO loop through each node and free its data
+    // to solve memory leak
+    hashtbl_destroy(p_cur_node->p_nodes);
     free(p_trie);
 }
 
@@ -141,5 +145,6 @@ node * trie_insert(trie * p_trie, const void *p_data)
     }
     hashtbl_insert(p_cur_node->p_nodes, &((data)[0]), p_data);
     free(data);
+    p_trie->size++;
     return p_cur_node;
 }
