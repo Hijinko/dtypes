@@ -8,26 +8,14 @@
 static const int mult = 31;
 
 /*
- * @brief hash function for single characters default hash
- *  if no hash is specified
- * @param p_key the word to hash
- * @return the hash key integer or -1 on error
+ * @brief the element in the hash table that holds each key and value pair
+ * @param p_key a unique key for each data in the table
+ * @param p_value the data that the key points to
  */
-static int64_t hash_string(const void * p_key)
-{
-    // cant get the hash of a NULL value
-    if (NULL == p_key){
-        return -1;
-    }
-    // this hash is for strings so convert the data to a string
-    char * data = (char *)p_key;
-    int64_t retval = 0;
-    int8_t curval = data[0];
-    for (size_t pos = 1; pos < strlen(data); pos++){
-        retval = mult * retval + curval;
-    }
-    return retval;
-}
+struct hashtbl_elem {
+    const void * p_key;
+    const void * p_value;
+};
 
 /*
  * @brief hash table structure
@@ -50,14 +38,47 @@ struct hashtbl {
 };
 
 /*
- * @brief the element in the hash table that holds each key and value pair
- * @param p_key a unique key for each data in the table
- * @param p_value the data that the key points to
+ * @brief hash function for single characters default hash
+ *  if no hash is specified
+ * @param p_key the word to hash
+ * @return the hash key integer or -1 on error
  */
-struct hashtbl_elem {
-    const void * p_key;
-    const void * p_value;
-};
+static int64_t hash_string(const void * p_key)
+{
+    // cant get the hash of a NULL value
+    if (NULL == p_key){
+        return -1;
+    }
+    // this hash is for strings so convert the data to a string
+    char * data = (char *)p_key;
+    int64_t retval = 0;
+    int8_t curval = data[0];
+    for (size_t pos = 1; pos < strlen(data); pos++){
+        retval = mult * retval + curval;
+    }
+    return retval;
+}
+
+static hashtbl_elem * hashtbl_lookup(hashtbl * p_hashtbl, const void * p_key)
+{
+    // hash the key to get the correct bucket
+    int64_t bucket = p_hashtbl->p_hash(p_key) % p_hashtbl->buckets;
+    list * p_list = p_hashtbl->pp_table[bucket];
+    // if the list is NULL then no data exists for the key
+    if (NULL == p_list){
+        return NULL;
+    }
+    // iterate through the list and search for the key that matches
+    elem * p_elem = list_head(p_list);
+    for (;NULL != p_elem; p_elem = list_next(p_elem)){
+        hashtbl_elem * p_hashtbl_elem = (hashtbl_elem *)list_data(p_elem);
+        if (p_key == p_hashtbl_elem->p_key){
+            return p_hashtbl_elem;        
+        }
+    }
+    // no key was found that matches
+    return NULL;
+}
 
 /*
  * @brief creates and initializes a hash table
@@ -198,8 +219,5 @@ const void * hashtbl_value(hashtbl * p_hashtbl, const void * p_key)
     if ((NULL == p_hashtbl) || (0 == p_hashtbl->size) || (NULL == p_key)){
         return NULL;
     }
-    int64_t bucket = p_hashtbl->p_hash(p_key) % p_hashtbl->buckets;
-    hashtbl_elem * p_hashtbl_elem = (hashtbl_elem *)list_data(
-                                     list_head(p_hashtbl->pp_table[bucket]));
-    return p_hashtbl_elem->p_value;
+    return hashtbl_lookup(p_hashtbl, p_key)->p_value;
 }
