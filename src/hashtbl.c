@@ -127,3 +127,8 @@ int64_t hashtbl_size(hashtbl * p_hashtbl)
     }
     return p_hashtbl->size;
 }
+
+elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_data)
+{
+    return NULL;
+}

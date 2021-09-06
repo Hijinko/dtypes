@@ -27,6 +27,12 @@ START_TEST(test_hashtbl_size)
     ck_assert_int_eq(0, hashtbl_size(p_hashtbl));
 } END_TEST
 
+START_TEST(test_hashtbl_insert)
+{
+    ck_assert(NULL != hashtbl_insert(p_hashtbl, "Hello"));     
+    ck_assert_int_eq(1, hashtbl_size(p_hashtbl));
+} END_TEST
+
 // create suite
 Suite * suite_hashtbl(void)
 {
@@ -36,6 +42,7 @@ Suite * suite_hashtbl(void)
     tcase_add_checked_fixture(p_core, start_hashtbl, teardown_hashtbl);
     tcase_add_test(p_core, test_hashtbl_init);
     tcase_add_test(p_core, test_hashtbl_size);
+    tcase_add_test(p_core, test_hashtbl_insert);
     // add core to suite
     suite_add_tcase(p_suite, p_core);
     return p_suite;
