@@ -5,11 +5,11 @@
 #include <stdio.h>
 #include <stdint.h>
 
-static * p_hashtbl = NULL;
+static hashtbl * p_hashtbl = NULL;
 
 static void start_hashtbl(void)
 {
-    p_hashtbl = hashtbl_init(NULL, NULL, NULL, NULL); 
+    p_hashtbl = hashtbl_init(10, NULL, NULL, NULL); 
 }
 
 static void teardown_hashtbl(void)
