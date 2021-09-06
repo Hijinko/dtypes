@@ -7,9 +7,16 @@
 
 static hashtbl * p_hashtbl = NULL;
 
+static int8_t test_compare(const void * p_key1, const void * p_key2)
+{
+    hashtbl_elem * p_data1 = (void *)p_key1;
+    hashtbl_elem * p_data2 = (void *)p_key2;
+    return (p_data1 < p_data2) ? -1 : ((p_data1 == p_data2) ? 0 : 1);
+}
+
 static void start_hashtbl(void)
 {
-    p_hashtbl = hashtbl_init(10, NULL, NULL, NULL); 
+    p_hashtbl = hashtbl_init(10, NULL, NULL, test_compare); 
 }
 
 static void teardown_hashtbl(void)
