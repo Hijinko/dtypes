@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <list.h>
 
 /*
  * @brief hash function for single characters default hash
@@ -18,7 +19,7 @@ static int64_t hash_string(const char * key);
  * @param p_destroy user defined function to destroy any allocated data
  * @param p_compare user defined function to compare the data in the hashtbl
  *  bin the hashtbl
- * @param p_table an array that holds the data
+ * @param p_table an array of lists that holds all the data
  */ 
 struct hashtbl {
     int64_t buckets;
@@ -26,7 +27,7 @@ struct hashtbl {
     int64_t (* p_hash)(const void * p_key);
     void (* p_destroy)(const void * p_data);
     int8_t (* p_compare)(const void * p_key1, const void * p_key2);
-    uint8_t * p_table;
+    list ** p_table;
 };
 
 /*
@@ -57,7 +58,11 @@ hashtbl * hashtbl_init(int64_t buckets,
     // set the values of the hashtbl
     p_hashtbl->buckets = buckets;
     p_hashtbl->size = 0;
-    p_hashtbl->p_table = calloc(p_hashtbl->buckets + 1, sizeof(int8_t));
+    // a list will be created just to allocate space in the table
+    list * p_temp_list = list_init(NULL, NULL);
+    p_hashtbl->p_table = calloc(p_hashtbl->buckets + 1, sizeof(p_temp_list));
+    // the temp list is no longer needed
+    list_destroy(p_temp_list);
     // if the table cannot be allocated then the hashtbl needs to be freed
     if (NULL == p_hashtbl->p_table){
         free(p_hashtbl);
