@@ -11,21 +11,22 @@ static const int mult = 31;
  * @brief hash function for single characters default hash
  *  if no hash is specified
  * @param p_key the word to hash
- * @param buckets the number of elements in the table to hash
  * @return the hash key integer or -1 on error
  */
-static int64_t hash_string(const char * p_key, int64_t buckets)
+static int64_t hash_string(const void * p_key)
 {
     // cant get the hash of a NULL value
     if (NULL == p_key){
         return -1;
     }
+    // this hash is for strings so convert the data to a string
+    char * data = (char *)p_key;
     int64_t retval = 0;
-    int8_t curval = p_key[0];
-    for (size_t pos = 1; pos < strlen(p_key); pos++){
+    int8_t curval = data[0];
+    for (size_t pos = 1; pos < strlen(data); pos++){
         retval = mult * retval + curval;
     }
-    return retval % buckets;
+    return retval;
 }
 
 /*
@@ -87,7 +88,13 @@ hashtbl * hashtbl_init(int64_t buckets,
         perror("hashtbl_init ");
         return NULL;
     }
-    p_hashtbl->p_hash = p_hash;
+    // if no hash is given then use the hash_string as the default hash
+    if (NULL == p_hash){
+        p_hashtbl->p_hash = hash_string;
+    }
+    else {
+        p_hashtbl->p_hash = p_hash;
+    }
     p_hashtbl->p_destroy = p_destroy;
     p_hashtbl->p_compare = p_compare;
     return p_hashtbl;
