@@ -22,6 +22,8 @@ $(BIN)queue.o: $(SRC)queue.c $(INC)queue.h $(BIN)list.o
 	$(CMD) -c $< -o $@
 $(BIN)stack.o: $(SRC)stack.c $(INC)stack.h $(BIN)list.o
 	$(CMD) -c $< -o $@
+$(BIN)hashtbl.o: $(SRC)hashtbl.c $(INC)hashtbl.h $(BIN)list.o
+	$(CMD) -c $< -o $@
 
 ################
 # test targets #
@@ -38,14 +40,17 @@ $(TSTBIN)test_queue.o: $(TSTSRC)test_queue.c $(TSTINC)test_queue.h
 	$(CMD) -c $< -o $@ 
 $(TSTBIN)test_stack.o: $(TSTSRC)test_stack.c $(TSTINC)test_stack.h
 	$(CMD) -c $< -o $@ 
+$(TSTBIN)test_hashtbl.o: $(TSTSRC)test_hashtbl.c $(TSTINC)test_hashtbl.h
+	$(CMD) -c $< -o $@ 
 
 ####################
 # libarary targets #
 ####################
 $(TSTBIN)testlibdtype.a: $(TSTBIN)testlibdtype.a($(TSTBIN)test_list.o\
-	$(TSTBIN)test_set.o $(TSTBIN)test_queue.o $(TSTBIN)test_stack.o)
+	$(TSTBIN)test_set.o $(TSTBIN)test_queue.o $(TSTBIN)test_stack.o\
+	$(TSTBIN)test_hashtbl.o)
 $(BIN)libdtype.a: $(BIN)libdtype.a($(BIN)list.o $(BIN)set.o $(BIN)queue.o\
-	$(BIN)stack.o)
+	$(BIN)stack.o $(BIN)hashtbl.o)
 
 #######################
 # environment targets #

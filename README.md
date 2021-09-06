@@ -10,7 +10,7 @@ A repository of different data types that are not standard in the C library i.e.
 - [x] set
 - [ ] tree
 - [ ] trie
-- [ ] hashtble
+- [x] hashtble
 - [ ] graph
 - [ ] heap
 
