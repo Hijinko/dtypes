@@ -282,3 +282,17 @@ void hashtbl_delete(hashtbl * p_hashtbl, const void * p_key)
     p_hashtbl->size--;
 }
 
+/*
+ * @brief gets the hashtbl_elem from a hash table given the key
+ * @param p_hashtbl the hash table to get the value from
+ * @param p_key the key that points to the data in the table
+ * @return the hash table element that corresponds to the key in the hash table
+ */
+hashtbl_elem * hashtbl_search(hashtbl * p_hashtbl, const void * p_key)
+{
+    // cant get the value from a NULL or empty hash table or from a NULL key
+    if ((NULL == p_hashtbl) || (0 == p_hashtbl->size) || (NULL == p_key)){
+        return NULL;
+    }
+    return hashtbl_lookup(p_hashtbl, p_key);
+}
