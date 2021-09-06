@@ -3,12 +3,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <list.h>
+#include <string.h>
+
+static const int mult = 3;
 
 /*
  * @brief hash function for single characters default hash
  *  if no hash is specified
  */
-static int64_t hash_string(const char * key);
+static int64_t hash_string(const char * p_key)
+{
+    // cant get the hash of a NULL value
+    if (NULL == p_key){
+        return -1;
+    }
+    int64_t retval = 0;
+    int8_t curval = p_key[0];
+    for (size_t pos = 1; pos < strlen(p_key); pos++){
+        retval = mult * retval + curval;
+    }
+    return retval;
+}
 
 /*
  * @brief hash table structure
