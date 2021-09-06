@@ -38,6 +38,17 @@ struct hashtbl {
 };
 
 /*
+ * @brief gets the bucket that the key will be in for the hash table
+ * @param p_hashtbl the hash table to get the bucket
+ * @param p_key the key to hash in order to find the bucket
+ * @return an int64_t that is the index of the bucket per the hash
+ */
+static int64_t hash_bucket(hashtbl * p_hashtbl, const void * p_key)
+{
+    return p_hashtbl->p_hash(p_key) % p_hashtbl->buckets;
+}
+
+/*
  * @brief hash function for single characters default hash
  *  if no hash is specified
  * @param p_key the word to hash
@@ -243,6 +254,30 @@ const void * hashtbl_value(hashtbl * p_hashtbl, const void * p_key)
  */
 void hashtbl_delete(hashtbl * p_hashtbl, const void * p_key)
 {
-    return;
+    // cant delete from a NULL or empty hash table or from a NULL key
+    if ((NULL == p_hashtbl) || (0 == p_hashtbl->size) || (NULL == p_key)){
+        return;
+    }
+    hashtbl_elem * p_hashtbl_elem = hashtbl_lookup(p_hashtbl, p_key);
+    // cant delete a element that doesn't exists in the table
+    if (NULL == p_hashtbl_elem){
+        return;
+    }
+    // the element the value is in will be needed to remove from the list later
+    int64_t bucket = hash_bucket(p_hashtbl, p_key);
+    list * p_list = p_hashtbl->pp_table[bucket]; 
+    if (NULL == p_list){
+        return;
+    }
+    elem * p_elem = list_search(p_list, p_hashtbl_elem);
+    /*
+    // free the data if a user defined destroy was set
+    if (NULL != p_hashtbl->p_destroy){
+        p_hashtbl->p_destroy((void *)p_hashtbl_elem->p_value);
+    }
+    //free(p_hashtbl_elem);
+    //list_delete(p_list, p_elem);
+    */
+    p_hashtbl->size--;
 }
 

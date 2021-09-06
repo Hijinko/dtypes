@@ -342,8 +342,10 @@ elem * list_prev(elem * p_elem)
  */
 elem * list_search(list * p_list, const void * p_data)
 {
-    // cant search in a NULL or empty list or from NULL data 
-    if ((NULL == p_list) || (0 == p_list->size) || (NULL == p_data)){
+    // cant search in a NULL or empty list or from NULL data or from a list
+    // without a compare function
+    if ((NULL == p_list) || (0 == p_list->size) || (NULL == p_data) ||
+        (NULL == p_list->p_compare)){
         return NULL;
     }
     // iterate through the list and compare the values
