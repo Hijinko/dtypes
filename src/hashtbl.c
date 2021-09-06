@@ -144,6 +144,15 @@ void hashtbl_destroy(hashtbl * p_hashtbl)
     // iterate through the hash table and destroy any allocated list
     for(int64_t bucket = 0; bucket < p_hashtbl->buckets; bucket++){
         if (NULL != p_hashtbl->pp_table[bucket]){
+            elem * p_elem = list_head(p_hashtbl->pp_table[bucket]);
+            // iterate through the list and free the data and the hashtbl_elem
+            hashtbl_elem * p_hashtbl_elem = (hashtbl_elem *)list_data(p_elem);
+            for (;NULL != p_elem; p_elem = list_next(p_elem)){
+                if (NULL != p_hashtbl->p_destroy){
+                    p_hashtbl->p_destroy((void *)(p_hashtbl_elem->p_value));
+                }
+                free(p_hashtbl_elem);
+            }
             list_destroy(p_hashtbl->pp_table[bucket]);
         }
     }
@@ -176,8 +185,7 @@ hashtbl_elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key,
     int64_t bucket = p_hashtbl->p_hash(p_key) % p_hashtbl->buckets;
     // if the bucket in the table is NULL then a new list has to be initialized
     if (NULL == p_hashtbl->pp_table[bucket]){
-        p_hashtbl->pp_table[bucket] = list_init(p_hashtbl->p_destroy,
-                                                p_hashtbl->p_compare);
+        p_hashtbl->pp_table[bucket] = list_init(NULL, p_hashtbl->p_compare);
     }
     // if a list already exists check if the key is already in the list
     else if(NULL != hashtbl_lookup(p_hashtbl, p_key)){
