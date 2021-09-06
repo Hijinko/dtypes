@@ -234,3 +234,15 @@ const void * hashtbl_value(hashtbl * p_hashtbl, const void * p_key)
     }
     return hashtbl_lookup(p_hashtbl, p_key)->p_value;
 }
+
+/*
+ * @brief deletes a key and its value from a hash table and
+ *  frees any allocated memory
+ * @param p_hashtbl the hash table to delete from
+ * @param p_key the key to delete from the hash table
+ */
+void hashtbl_delete(hashtbl * p_hashtbl, const void * p_key)
+{
+    return;
+}
+
