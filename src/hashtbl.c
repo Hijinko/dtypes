@@ -179,6 +179,11 @@ hashtbl_elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key,
         p_hashtbl->pp_table[bucket] = list_init(p_hashtbl->p_destroy,
                                                 p_hashtbl->p_compare);
     }
+    // if a list already exists check if the key is already in the list
+    else if(NULL != hashtbl_lookup(p_hashtbl, p_key)){
+        // can only have unique keys in a hash table
+        return NULL;
+    }
     // a hashtbl element has to be allocated with the new data
     hashtbl_elem * p_hashtbl_elem = calloc(1, sizeof(*p_hashtbl_elem));
     if (NULL == p_hashtbl_elem){
