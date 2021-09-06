@@ -14,4 +14,5 @@ int64_t hashtbl_size(hashtbl * p_hashtbl);
 hashtbl_elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key,
                               const void * p_value);
 const void * hashtbl_data(hashtbl_elem * p_hashtbl_elem);
+const void * hashtbl_value(hashtbl * p_hashtbl, const void * p_key);
 #endif

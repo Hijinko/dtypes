@@ -175,6 +175,7 @@ hashtbl_elem * hashtbl_insert(hashtbl * p_hashtbl, const void * p_key,
 /*
  * @brief gets the value from a hashtbl_elem structure
  * @param p_hashtble_elem the element to get the value from
+ * @return the value in the hashtble_elem structure
  */
 const void * hashtbl_data(hashtbl_elem * p_hashtbl_elem)
 {
@@ -182,5 +183,23 @@ const void * hashtbl_data(hashtbl_elem * p_hashtbl_elem)
     if (NULL == p_hashtbl_elem){
         return NULL;
     }
+    return p_hashtbl_elem->p_value;
+}
+
+/*
+ * @brief gets the value from a hash table given the key
+ * @param p_hashtbl the hash table to get the value from
+ * @param p_key the key that points to the data in the table
+ * @return the value that corresponds to the key in the hash table
+ */
+const void * hashtbl_value(hashtbl * p_hashtbl, const void * p_key)
+{
+    // cant get the value from a NULL or empty hash table or from a NULL key
+    if ((NULL == p_hashtbl) || (0 == p_hashtbl->size) || (NULL == p_key)){
+        return NULL;
+    }
+    int64_t bucket = p_hashtbl->p_hash(p_key) % p_hashtbl->buckets;
+    hashtbl_elem * p_hashtbl_elem = (hashtbl_elem *)list_data(
+                                     list_head(p_hashtbl->pp_table[bucket]));
     return p_hashtbl_elem->p_value;
 }
