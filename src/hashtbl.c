@@ -110,6 +110,12 @@ void hashtbl_destroy(hashtbl * p_hashtbl)
     if (NULL == p_hashtbl){
         return;
     }
+    // iterate through the hash table and destroy any allocated list
+    for(int64_t bucket = 0; bucket < p_hashtbl->buckets; bucket++){
+        if (NULL != p_hashtbl->pp_table[bucket]){
+            list_destroy(p_hashtbl->pp_table[bucket]);
+        }
+    }
     free(p_hashtbl->pp_table);
     free(p_hashtbl);
 }
