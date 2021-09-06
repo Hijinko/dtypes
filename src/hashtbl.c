@@ -18,7 +18,7 @@ struct hashtbl {
     uint64_t (* p_hash)(const void * p_key);
     void (* p_destroy)(const void * p_data);
     int8_t (* p_compare)(const void * p_key1, const void * p_key2);
-    const void * p_table;
+    uint8_t * p_table;
 };
 
 /*
@@ -48,14 +48,21 @@ hashtbl * hashtbl_init(uint64_t buckets,
     }
     // set the values of the hashtbl
     p_hashtbl->buckets = buckets;
+    p_hashtbl->p_table = calloc(p_hashtbl->buckets + 1, sizeof(int8_t));
+    // if the table cannot be allocated then the hashtbl needs to be freed
+    if (NULL == p_hashtbl->p_table){
+        free(p_hashtbl);
+        perror("hashtbl_init ");
+        return NULL;
+    }
     p_hashtbl->p_hash = p_hash;
     p_hashtbl->p_destroy = p_destroy;
     p_hashtbl->p_compare = p_compare;
-    p_hashtbl->p_table = NULL;
     return p_hashtbl;
 }
 
 void hashtbl_destroy(hashtbl * p_hashtbl)
 {
+    free(p_hashtbl->p_table);
     free(p_hashtbl);
 }
